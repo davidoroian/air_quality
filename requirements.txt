@@ -1,7 +1,9 @@
 pyodbc
 python-dotenv
-fastapi
 uvicorn[standard]
 pydantic
 azure-identity
 json2xml
+python-dateutil
+pandas
+matplotlib
