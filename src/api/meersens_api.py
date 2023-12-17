@@ -30,7 +30,7 @@ def insert_pollutants_into_database(entries):
         for entry in entries:
             if entry['datetime'] > existing_entries[-1].recording_date or entry['datetime'] < existing_entries[0].recording_date:
                 create_entry(entry['datetime'])
-                entry_id = get_entry(entry['datetime'])
+                entry_id = get_entry(entry['datetime']).id
                 create_pm10_entry(entry_id=entry_id, qualification=entry['pollutants']['pm10']['index']['qualification'], description=entry['pollutants']['pm10']['index']['description'], value=entry['pollutants']['pm10']['index']['value'])
                 create_pm25_entry(entry_id=entry_id, qualification=entry['pollutants']['pm25']['index']['qualification'], description=entry['pollutants']['pm25']['index']['description'], value=entry['pollutants']['pm25']['index']['value'])
                 create_co_entry(entry_id=entry_id, qualification=entry['pollutants']['co']['index']['qualification'], description=entry['pollutants']['co']['index']['description'], value=entry['pollutants']['co']['index']['value'])
@@ -46,7 +46,7 @@ def get_api_response(api_key):
     lat = os.getenv('LAT')
     long = os.getenv('LONG')
 
-    from_date = datetime.datetime.today() - datetime.timedelta(days=1)
+    from_date = datetime.datetime.today() - datetime.timedelta(days=10)
     to_date = datetime.datetime.today()
     hours = to_date.hour
     to_date_modif = to_date.replace(hour=hours-3, minute=0)
