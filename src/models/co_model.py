@@ -20,8 +20,8 @@ def get_co_by_entry_id(id):
         row = cursor.fetchone()
         return row
     
-def create_co_entry(entry_id, qualification, description, value):
+def create_co_entry(entry_id, qualification, description, value, date):
     with get_conn() as conn:
         cursor = conn.cursor()
-        cursor.execute(f"INSERT INTO co (entry_id, qualification, description, value) VALUES (?, ?, ?, ?)", entry_id, qualification, description, value)
+        cursor.execute(f"INSERT INTO co (entry_id, qualification, description, value, date) VALUES (?, ?, ?, ?, ?)", entry_id, qualification, description, value, date)
         conn.commit()
