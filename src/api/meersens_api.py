@@ -4,6 +4,7 @@ import requests
 import datetime
 from json2xml import json2xml
 from dotenv import load_dotenv
+from src.email import send_email
 from src.utils.utils import write_to_file
 from src.models.entry_model import get_entries, get_entry, create_entry
 from src.models.co_model import get_co_by_entry_id, get_co_entries, create_co_entry
@@ -16,11 +17,15 @@ def get_wanted_pollutants(response, result):
     for item in response['values']:
             hour_report = {}
             hour_report['pollutants'] = {}
+            email = os.getenv('EMAIL')
 
             hour_report['datetime'] = datetime.datetime.strptime(item['datetime'], "%Y-%m-%dT%H:%M:%S.%fZ")
             hour_report['pollutants']['co'] = item['pollutants']['co']
             hour_report['pollutants']['pm10'] = item['pollutants']['pm10']
             hour_report['pollutants']['pm25'] = item['pollutants']['pm25']
+            # if hour_report['pollutants']['co']['value'] > 0.75:
+            #     message=f"CO value is HIGH = {hour_report['pollutants']['co']['value']}"
+            #     send_email.send_email(email, email, message)
 
             result.append(hour_report)
 
@@ -46,7 +51,7 @@ def get_api_response(api_key):
     lat = os.getenv('LAT')
     long = os.getenv('LONG')
 
-    from_date = datetime.datetime.today() - datetime.timedelta(days=1)
+    from_date = datetime.datetime.today() - datetime.timedelta(days=5)
     to_date = datetime.datetime.today()
     hours = to_date.hour
     to_date_modif = to_date.replace(hour=hours-3, minute=0)
